@@ -18,6 +18,10 @@ Nota: O array não tem números repetidos.
 #include <sys/wait.h>
 #include <time.h>
 
+
+int target_number = 13; // número que os processos devem buscar
+int range_array = 1000; // gera números aleatórios entre 0 e este número
+
 void printArray(int array[], int size) {
   for (int i = 0; i < size; i++) {
     printf("vetor[%d]::%d\n", i, array[i]);
@@ -29,23 +33,15 @@ void printArray(int array[], int size) {
 int main(int argc, char const *argv[]){
     int vetor[1000];
     srand(time(NULL));   // Initialization, should only be called once.
-
-    // Returns a pseudo-random integer between 0 and RAND_MAX.
-    // random int between 0 and 19
-    // int r = rand() % 20;
     int contains = 0;
 
     for (int i = 0; i < 1000;){
-        // int r = rand() % 20;
-        // vetor[i] = r;
-        // printf("vetor[%d]::%d\n", i, vetor[i]);
-        
         // primeira inserção
         if (i == 0){
-        vetor[i] = rand() % 1000;
+        vetor[i] = rand() % range_array;
         i++;
         } else{
-            int r = rand() % 1000;
+            int r = rand() % range_array;
             // checar comparação dos elementos
             for (int j = 0; j < i; j++){
                 if (r == vetor[j]){
@@ -79,7 +75,7 @@ int main(int argc, char const *argv[]){
             printf("filho %d - start[%d] - finish[%d]\n", i +1, start, finish);
             
             for (int j = start; j < finish; j++) {
-                if(vetor[j] == 13){ // Procura se o vetor possui o seguinte valor.
+                if(vetor[j] == target_number){ // Procura se o vetor possui o seguinte valor.
                     printf("Filho %d encontrou o número na posição %d\n", i + 1, j);
                     exit(i +1);
                 }
@@ -108,11 +104,9 @@ int main(int argc, char const *argv[]){
     }
 
     if (found_by_child != 0) {
-        printf("O número foi encontrado pelo filho [%d]\n", found_by_child);
+        printf("O número [%d] foi encontrado pelo filho [%d]\n", target_number, found_by_child);
     } else {
         printf("O número não foi encontrado\n");
     }
-
-
 
 }
